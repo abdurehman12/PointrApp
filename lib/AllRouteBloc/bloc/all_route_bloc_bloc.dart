@@ -11,9 +11,9 @@ part 'all_route_bloc_state.dart';
 class AllRouteBloc extends Bloc<AllRouteBlocEvent, AllRouteBlocState> {
   final AllRoutesRepo _PRepo;
 
-  AllRouteBloc(this._PRepo) : super(AllRouteLoad()) {
+  AllRouteBloc(this._PRepo) : super(const AllRouteLoad()) {
     on<AllRouteBlocEvent>((event, emit) async {
-      emit(AllRouteLoad());
+      emit(const AllRouteLoad());
       try {
         if (event is RouteAddEvent) {
           await _PRepo.createRoute(event.Name, event.coordinates);

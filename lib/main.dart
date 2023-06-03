@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 
 // import 'package:pointr/classes/catalogue.dart';
 import 'package:pointr/classes/my_db.dart';
-import 'package:pointr/my_theme.dart';
 import 'package:pointr/screens/HomeScreen.dart';
-import '/screens/login.dart';
+import 'package:pointr/screens/NewLogin.dart';
 // import 'package:pointr/providers/current_loc_provider.dart';
 // import 'package:pointr/providers/from_provider.dart';
 // import 'package:pointr/providers/nearby_provider.dart';
@@ -17,7 +16,6 @@ import '/screens/login.dart';
 // import 'package:pointr/providers/to_provider.dart';
 // import 'package:pointr/screens/HomeScreen.dart';
 // import 'package:pointr/screens/set_points_view_routes.dart';
-import 'package:pointr/widgets/bottom_nav_bar.dart';
 
 import 'AllRouteBloc/AllRouteUI.dart';
 import 'CustomRouteBloc/CustomRouteUI.dart';
@@ -111,15 +109,16 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       routes: {
-        "/login": (context) => LoginPage(),
+        "/login": (context) => const Login(),
         // "/SignUp": (context) => SignUp(),
-        "/suggestedRoute": (context) => SuggestedRouteUI(), //data_bloc_ui(),
+        "/suggestedRoute": (context) =>
+            const SuggestedRouteUI(), //data_bloc_ui(),
         // "/Delete_User": (context) => DeleteUser(),
         // "/Update_user": (context) => UpdateUI(),
         // "/databloc": (context) => AddUI(),
-        "/customRoute": (context) => CustomRouteUI(),
-        "/AllRoute": (context) => AllRouteUI(),
-        "/navbar": (context) => HomeScreen(),
+        "/customRoute": (context) => const CustomRouteUI(),
+        "/AllRoute": (context) => const AllRouteUI(),
+        "/navbar": (context) => const HomeScreen(),
       },
       title: 'Pointr',
       // theme: ThemeData(
@@ -131,6 +130,7 @@ class MyApp extends StatelessWidget {
       //   primarySwatch: Colors.indigo,
       //   colorScheme: theme.colorScheme.copyWith(
       //     secondary: Colors.amber,
+
       //     background: Colors.white,
       //   ),
       //   fontFamily: 'Inter',
@@ -138,7 +138,7 @@ class MyApp extends StatelessWidget {
       //     bodyLarge: TextStyle(fontSize: 17),
       //   ),
       // ),
-      initialRoute: "/suggestedRoute",
+      initialRoute: "/login",
       // home: const BNavScaffold(index: 0),
     );
     //     ),

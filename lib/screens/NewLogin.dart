@@ -1,302 +1,302 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:rounded_loading_button/rounded_loading_button.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:socialsignup/login.dart';
-// //import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:pointr/components/constants.dart';
+// import 'package:get/get.dart';
+// import 'package:mintrewards/Screens/SignUp.dart';
+// import 'package:mint_partner/classes/partner.dart';
+// import '../screens/home.dart';
+// import 'register/register1.dart';
+// import '../utils/extraWidgets.dart';
+// import '../utils/utils.dart';
+import 'HomeScreen.dart';
 
-// import '../provider/internet_provider.dart';
-// import '../provider/sign_in_provider.dart';
-// import '../signup.dart';
-// import '../utils/next_screen.dart';
-// import '../utils/snack_bar.dart';
-// import 'home_screen.dart';
+class Login extends StatefulWidget {
+  const Login({super.key});
+  static final TextEditingController ecnt = TextEditingController();
+  static final TextEditingController pcnt = TextEditingController();
 
-// class LoginScreen extends StatefulWidget {
-//   const LoginScreen({super.key});
+  @override
+  State<Login> createState() => _LoginState();
+}
 
-//   @override
-//   State<LoginScreen> createState() => _LoginScreenState();
-// }
+class _LoginState extends State<Login> {
+  @override
+  void dispose() {
+    super.dispose();
+    Login.pcnt.clear();
+  }
 
-// class _LoginScreenState extends State<LoginScreen> {
-//   final GlobalKey _scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
+  login() async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: Login.ecnt.text, password: Login.pcnt.text);
 
-//   final RoundedLoadingButtonController googleController =
-//       RoundedLoadingButtonController();
-//   final RoundedLoadingButtonController facebookController =
-//       RoundedLoadingButtonController();
-//   final RoundedLoadingButtonController twitterController =
-//       RoundedLoadingButtonController();
-//   final RoundedLoadingButtonController AuthController =
-//       RoundedLoadingButtonController();
+      print(credential.user);
+      // Future.delayed(const Duration(seconds: 4), () {
+      //   // AuthController.success();
+      // });
+      // AuthController.reset();
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Logging in your account...'),
+              ],
+            ),
+          );
+        },
+      );
+      Future.delayed(Duration(seconds: 2), () async {
+        // Hide the dialog
+        Navigator.of(context).pop();
+        // Perform further actions after login
+        // e.g., navigate to a new screen
+        await Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+            (route) => false);
+      });
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+                  title: const Text(
+                    "Error",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  content: const Text("No user found for that email."),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("OK"))
+                  ],
+                ));
+        // AuthController.reset();
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+                  title:
+                      const Text("Error", style: TextStyle(color: Colors.red)),
+                  content: const Text("Wrong password provided for that user."),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("OK"))
+                  ],
+                ));
+        // AuthController.reset();
+        print('Wrong password provided for that user.');
+      }
+    }
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         key: _scaffoldKey,
-//         body: SafeArea(
-//             child: Padding(
-//           padding:
-//               const EdgeInsets.only(left: 40, right: 40, top: 90, bottom: 30),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Flexible(
-//                   flex: 2,
-//                   child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         const Image(
-//                           image: NetworkImage(
-//                               "https://raw.githubusercontent.com/backslashflutter/socialauth_flutter_firebase/main/assets/logo.png"),
-//                           height: 80,
-//                           width: 80,
-//                           fit: BoxFit.cover,
-//                         ),
-//                         const SizedBox(
-//                           height: 20,
-//                         ),
-//                         const Text("Welcome to FlutterFirebase",
-//                             style: TextStyle(
-//                                 fontSize: 25, fontWeight: FontWeight.w500)),
-//                         const SizedBox(
-//                           height: 10,
-//                         ),
-//                         Text(
-//                           "Learn Authentication with Provider",
-//                           style:
-//                               TextStyle(fontSize: 15, color: Colors.grey[600]),
-//                         )
-//                       ])),
-//               //rounded loading button
-//               Column(
-//                   crossAxisAlignment: CrossAxisAlignment.center,
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     RoundedLoadingButton(
-//                       onPressed: () {
-//                         Navigator.push(
-//                             context,
-//                             MaterialPageRoute(
-//                                 builder: (context) => LoginPage()));
-//                         AuthController.reset();
-//                       },
-//                       controller: AuthController,
-//                       successColor: Colors.black,
-//                       width: MediaQuery.of(context).size.width * 0.80,
-//                       elevation: 0,
-//                       borderRadius: 25,
-//                       color: Colors.black,
-//                       child: Wrap(
-//                         children: const [
-//                           Icon(
-//                             FontAwesomeIcons.signIn,
-//                             size: 20,
-//                             color: Colors.white,
-//                           ),
-//                           SizedBox(
-//                             width: 15,
-//                           ),
-//                           Text("Sign in with Email",
-//                               style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 15,
-//                                   fontWeight: FontWeight.w500)),
-//                         ],
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                     RoundedLoadingButton(
-//                       onPressed: () {
-//                         handleGoogleSignIn();
-//                         // Navigator.pushReplacement(
-//                         //     context,
-//                         //     MaterialPageRoute(
-//                         //         builder: (context) => const HomeScreen()));
-//                       },
-//                       controller: googleController,
-//                       successColor: Colors.red,
-//                       width: MediaQuery.of(context).size.width * 0.80,
-//                       elevation: 0,
-//                       borderRadius: 25,
-//                       color: Colors.red,
-//                       child: Wrap(
-//                         children: const [
-//                           Icon(
-//                             FontAwesomeIcons.google,
-//                             size: 20,
-//                             color: Colors.white,
-//                           ),
-//                           SizedBox(
-//                             width: 15,
-//                           ),
-//                           Text("Sign in with Google",
-//                               style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 15,
-//                                   fontWeight: FontWeight.w500)),
-//                         ],
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 10,
-//                     ),
-//                     RoundedLoadingButton(
-//                       onPressed: () {
-//                         handleFacebookAuth();
-//                       },
-//                       controller: facebookController,
-//                       successColor: Colors.blue,
-//                       width: MediaQuery.of(context).size.width * 0.80,
-//                       elevation: 0,
-//                       borderRadius: 25,
-//                       color: Colors.blue,
-//                       child: Wrap(
-//                         children: const [
-//                           Icon(
-//                             FontAwesomeIcons.facebook,
-//                             size: 20,
-//                             color: Colors.white,
-//                           ),
-//                           SizedBox(
-//                             width: 15,
-//                           ),
-//                           Text("Sign in with facebook",
-//                               style: TextStyle(
-//                                   color: Colors.white,
-//                                   fontSize: 15,
-//                                   fontWeight: FontWeight.w500)),
-//                         ],
-//                       ),
-//                     ),
-//                     const SizedBox(
-//                       height: 30,
-//                     ),
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: [
-//                         const Text("Not a member?"),
-//                         SizedBox(width: 8),
-//                         InkWell(
-//                             onTap: () {
-//                               Navigator.pushReplacement(
-//                                   context,
-//                                   MaterialPageRoute(
-//                                       builder: (context) => const Signup()));
-//                             },
-//                             child: Text(
-//                               "Register Now",
-//                               style: TextStyle(color: Colors.blue),
-//                             ))
-//                       ],
-//                     )
-//                   ])
-//             ],
-//           ),
-//         )));
-//   }
+  bool loading = false;
+  bool obscurePw = true;
 
-//   // handling google sigin in
-//   Future handleGoogleSignIn() async {
-//     final sp = context.read<SignInProvider>();
-//     final ip = context.read<InternetProvider>();
-//     await ip.checkInternetConnection();
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      // bg image
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/tile-light.png'),
+          repeat: ImageRepeat.repeat,
+          scale: 1,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: ListView(
+          children: [
+            //logo
+            // Extrawidgets().Logo(100, 40),
+            Padding(
+              padding: const EdgeInsets.only(top: 40.0),
+              child: Image.asset(
+                'assets/images/transport.png', // Replace with your image path
+                width: 150,
+                height: 150,
+              ),
+            ),
+            //you have been missed
 
-//     if (ip.hasInternet == false) {
-//       // ignore: use_build_context_synchronously
-//       openSnackbar(context, "Check your Internet connection", Colors.red);
-//       googleController.reset();
-//     } else {
-//       await sp.signInWithGoogle().then((value) {
-//         if (sp.hasError == true) {
-//           openSnackbar(context, sp.errorCode.toString(), Colors.red);
-//           googleController.reset();
-//         } else {
-//           // checking whether user exists or not
-//           sp.checkUserExists().then((value) async {
-//             if (value == true) {
-//               // user exists
-//               await sp.getUserDataFromFirestore(sp.uid).then((value) => sp
-//                   .saveDataToSharedPreferences()
-//                   .then((value) => sp.setSignIn().then((value) {
-//                         googleController.success();
-//                         handleAfterSignIn();
-//                       })));
-//             } else {
-//               // user does not exist
-//               sp.saveDataToFirestore().then((value) => sp
-//                   .saveDataToSharedPreferences()
-//                   .then((value) => sp.setSignIn().then((value) {
-//                         googleController.success();
-//                         handleAfterSignIn();
-//                       })));
-//               //print(sp);
-//             }
-//           });
-//         }
-//       });
-//     }
-//   }
-
-//   // handling facebook sigin in
-
-//   Future handleFacebookAuth() async {
-//     final sp = context.read<SignInProvider>();
-//     final ip = context.read<InternetProvider>();
-//     await ip.checkInternetConnection();
-
-//     if (ip.hasInternet == false) {
-//       openSnackbar(context, "Check your Internet connection", Colors.red);
-//       facebookController.reset();
-//     } else {
-//       await sp.signInWithFacebook().then((value) {
-//         if (sp.hasError == true) {
-//           openSnackbar(context, sp.errorCode.toString(), Colors.red);
-//           facebookController.reset();
-//         } else {
-//           // checking whether user exists or not
-//           sp.checkUserExists().then((value) async {
-//             if (value == true) {
-//               // user exists
-//               await sp.getUserDataFromFirestore(sp.uid).then((value) => sp
-//                   .saveDataToSharedPreferences()
-//                   .then((value) => sp.setSignIn().then((value) {
-//                         facebookController.success();
-//                         handleAfterSignIn();
-//                       })));
-//             } else {
-//               // user does not exist
-//               sp.saveDataToFirestore().then((value) => sp
-//                   .saveDataToSharedPreferences()
-//                   .then((value) => sp.setSignIn().then((value) {
-//                         facebookController.success();
-//                         handleAfterSignIn();
-//                       })));
-//             }
-//           });
-//         }
-//       });
-//     }
-//   }
-
-//   // handle after signin
-//   handleAfterSignIn() {
-//     Future.delayed(const Duration(milliseconds: 100)).then((value) {
-//       // nextScreenReplace(context, const HomeScreen());
-//       Navigator.pushReplacement(
-//           context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-//     });
-//     // Navigator.pushReplacement(
-//     //     context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-
-//     // Navigator.push(
-//     //   context,
-//     //   MaterialPageRoute(
-//     //     builder: (context) => const HomeScreen(),
-//     // ),
-//     // );
-//   }
-// }
+            const SizedBox(
+              height: 20,
+            ),
+            const Center(
+              child: Text(
+                "Your Bus Stop Solution!",
+                style: TextStyle(
+                  color: Colors.green,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+            //username
+            ,
+            const SizedBox(
+              height: 25,
+            ),
+            // login form
+            Card(
+              color: const Color(0xffEBFFF8),
+              elevation: 6,
+              margin: const EdgeInsets.fromLTRB(20, 0, 20, 30),
+              child: Padding(
+                padding: const EdgeInsets.all(25),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // text ("Login")
+                    const Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                            fontFamily: 'Barlow',
+                            color: Color(0xff151515),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // form
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          children: [
+                            // email
+                            TextFormField(
+                              controller: Login.ecnt,
+                              validator: (value) {
+                                if (value?.isValidEmail() ?? false) return null;
+                                return 'Incorrect email address';
+                              },
+                              readOnly: loading,
+                              decoration: const InputDecoration(
+                                  labelText: 'Email address',
+                                  prefixIcon: Icon(Icons.alternate_email),
+                                  errorMaxLines: 3),
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            // pw
+                            TextFormField(
+                              controller: Login.pcnt,
+                              validator: (value) => (value?.length ?? 0) > 5
+                                  ? null
+                                  : "The password is too short.",
+                              obscureText: obscurePw,
+                              readOnly: loading,
+                              keyboardType: TextInputType.visiblePassword,
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                prefixIcon: const Icon(Icons.password),
+                                suffixIcon: IconButton(
+                                  onPressed: () =>
+                                      setState(() => obscurePw = !obscurePw),
+                                  icon: Icon(
+                                    obscurePw
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // button
+                    loading
+                        ? const Dialog(
+                            insetPadding: EdgeInsets.symmetric(vertical: 24),
+                            child: LinearProgressIndicator(
+                                color: Color(0xffFE6E25)),
+                          )
+                        : Align(
+                            alignment: Alignment.bottomRight,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (formKey.currentState!.validate()) login();
+                              },
+                              style: const ButtonStyle(
+                                foregroundColor:
+                                    MaterialStatePropertyAll(Colors.white),
+                                backgroundColor:
+                                    MaterialStatePropertyAll(Color(0xffFE6E25)),
+                                minimumSize: MaterialStatePropertyAll(
+                                  Size(100, 50),
+                                ),
+                              ),
+                              child: const Text("Login"),
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+            ),
+            // text w link
+            Center(
+              child: InkWell(
+                // onTap: () => {
+                //   // Get.off(() => const SignUp()),
+                //   Navigator.push(context,
+                //       MaterialPageRoute(builder: (context) => SignUp()))
+                // },
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: "New user? ",
+                        style: TextStyle(
+                            color: Color(0xff151515), fontFamily: 'Cabin'),
+                      ),
+                      TextSpan(
+                          text: "Create a new account",
+                          style: const TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Color(0xffFE6E25),
+                              fontFamily: 'Cabin'),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () => {
+                                  // // Get.off(() => const SignUp()),
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => SignUp()))
+                                } //Get.off(() => const Register1()),
+                          ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,7 +1,4 @@
-import 'dart:math';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/AllRoutes.dart';
@@ -88,16 +85,14 @@ class AllRoutesRepo {
             final name = item['name'];
             final coordinates = item['coordinates']
                 as List<dynamic>; //[0].latitude; //as List<dynamic>?;
-            if (coordinates != null) {
-              myroute.routeName = name;
-              for (var point in coordinates) {
-                final geoPoint = point as GeoPoint;
-                final latitude = geoPoint.latitude;
-                final longitude = geoPoint.longitude;
-                print('Latitude: $latitude, Longitude: $longitude');
-                myroute.routeStops
-                    .add(LatLng(latitude: latitude, longitude: longitude));
-              }
+            myroute.routeName = name;
+            for (var point in coordinates) {
+              final geoPoint = point as GeoPoint;
+              final latitude = geoPoint.latitude;
+              final longitude = geoPoint.longitude;
+              print('Latitude: $latitude, Longitude: $longitude');
+              myroute.routeStops
+                  .add(LatLng(latitude: latitude, longitude: longitude));
             }
             // print('Name: $name');
             // print('Coordinates: $coordinates');

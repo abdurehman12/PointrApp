@@ -5,33 +5,35 @@ import '../classes/custom_route.dart';
 import '../screens/HomeScreen.dart';
 
 class AddRouteForm extends StatelessWidget {
+  const AddRouteForm({super.key});
+
   // var _routeNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextField(
+          const TextField(
             decoration: InputDecoration(labelText: 'Route Name'),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
                 onPressed: () => Navigator.pop(context),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               ElevatedButton(
-                child: Text('Add Route'),
+                child: const Text('Add Route'),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => DashboardScreen()),
+                    MaterialPageRoute(builder: (_) => const DashboardScreen()),
                   );
                 },
               ),
@@ -44,7 +46,7 @@ class AddRouteForm extends StatelessWidget {
 }
 
 class DashboardScreen extends StatefulWidget {
-  DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -52,10 +54,10 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   GoogleMapController? _mapController;
-  Set<Marker> _markers = {};
-  List<LatLng> _pressedCoordinates = [];
+  final Set<Marker> _markers = {};
+  final List<LatLng> _pressedCoordinates = [];
 
-  static final CameraPosition _initialCameraPosition = CameraPosition(
+  static const CameraPosition _initialCameraPosition = CameraPosition(
     target:
         LatLng(37.7749, -122.4194), // Set your desired initial position here
     zoom: 12,
@@ -90,7 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showSaveForm() {
-    var _routeNameController = TextEditingController();
+    var routeNameController = TextEditingController();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -104,8 +106,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
                   child: Text(
                     'Save Route',
                     style: TextStyle(
@@ -117,10 +119,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      controller: _routeNameController,
+                      controller: routeNameController,
                       decoration: InputDecoration(
                         labelText: 'Enter route name',
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.text_fields,
                           color: Colors.blue,
                         ),
@@ -133,7 +135,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: Colors.blue,
                           ),
                           borderRadius: BorderRadius.circular(10),
@@ -146,9 +148,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         return null;
                       },
                     )),
-                SizedBox(height: 16),
-                Text('Coordinates:'),
-                SizedBox(height: 8),
+                const SizedBox(height: 16),
+                const Text('Coordinates:'),
+                const SizedBox(height: 8),
                 Expanded(
                   child: ListView.builder(
                     itemCount: _pressedCoordinates.length,
@@ -157,13 +159,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
-                          leading: Icon(
+                          leading: const Icon(
                             Icons.location_on,
                             color: Colors.blue,
                           ),
                           title: Text(
                             'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -171,7 +173,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          contentPadding: EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                             vertical: 8,
                             horizontal: 16,
                           ),
@@ -180,19 +182,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
                       onPressed: () {
                         CustomRoute.addRouteToDb(
-                            _routeNameController.text, _pressedCoordinates);
+                            routeNameController.text, _pressedCoordinates);
                         showDialog(
                           context: context,
                           barrierDismissible: false,
                           builder: (BuildContext context) {
-                            return AlertDialog(
+                            return const AlertDialog(
                               content: Row(
                                 children: [
                                   CircularProgressIndicator(),
@@ -204,19 +206,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           },
                         );
 
-                        Future.delayed(Duration(seconds: 3), () {
+                        Future.delayed(const Duration(seconds: 3), () {
                           Navigator.pop(context); // Close the saving dialog
 
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Success'),
-                                content: Text('Route saved successfully.'),
+                                title: const Text('Success'),
+                                content:
+                                    const Text('Route saved successfully.'),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      print(_routeNameController.text);
+                                      print(routeNameController.text);
 
                                       setState(() {
                                         _pressedCoordinates
@@ -225,11 +228,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                       Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
-                                            builder: (context) => HomeScreen()),
+                                            builder: (context) =>
+                                                const HomeScreen()),
                                         (route) => false,
                                       );
                                     },
-                                    child: Text('OK'),
+                                    child: const Text('OK'),
                                   ),
                                 ],
                               );
@@ -237,7 +241,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           );
                         });
                       },
-                      child: Text('Save'),
+                      child: const Text('Save'),
                     ),
                   ],
                 ),
@@ -247,21 +251,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
         );
       },
     );
-    print(_routeNameController.text);
+    print(routeNameController.text);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        backgroundColor: Colors.green[400],
+        title: const Text('Add Route Screen'),
+        centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.undo),
+            icon: const Icon(Icons.undo),
             onPressed: _removeLastMarker,
           ),
           IconButton(
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
             onPressed: () {
               _showSaveForm();
             },

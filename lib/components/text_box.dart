@@ -19,7 +19,7 @@ class MyTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     var hint2 = hint;
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 25),
+        padding: const EdgeInsets.symmetric(horizontal: 25),
         child: TextField(
           maxLength: characterlength,
           controller: controller,
@@ -27,11 +27,11 @@ class MyTextField extends StatelessWidget {
           decoration: InputDecoration(
             suffixIcon: icon,
             hintText: hint,
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
             ),
             focusedBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+                const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
             // fillColor: Colors.white,
             // filled: true,
           ),

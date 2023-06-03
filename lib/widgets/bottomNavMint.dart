@@ -1,14 +1,13 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:pointr/AllRouteBloc/bloc/all_route_bloc_bloc.dart';
 import 'package:pointr/CustomRouteBloc/CustomRouteUI.dart';
 
 import '../AllRouteBloc/AllRouteUI.dart';
-import '../screens/home.dart';
 import 'Add_Route.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
+  const MyBottomNavigationBar({super.key});
+
   @override
   _MyBottomNavigationBarState createState() => _MyBottomNavigationBarState();
 }
@@ -31,19 +30,19 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       case 1:
         // Navigate to the Account screen
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AllRouteUI()));
+            context, MaterialPageRoute(builder: (context) => const AllRouteUI()));
         break;
       case 2:
         //Pop up request form
 
         // Show the form dialog
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => DashboardScreen()));
+            MaterialPageRoute(builder: (context) => const DashboardScreen()));
         break;
       case 3:
         // Navigate to the Store screen
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => CustomRouteUI()));
+            context, MaterialPageRoute(builder: (context) => const CustomRouteUI()));
         break;
       case 4:
         // Navigate to the Settings screen
@@ -83,7 +82,7 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
       // onTap: _onItemTapped,
       currentIndex: _selectedIndex,
       backgroundColor: Colors.white,
-      selectedItemColor: Color.fromARGB(255, 0, 0, 0),
+      selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
       unselectedItemColor: Colors.grey,
       onTap: _onItemTapped,
     );

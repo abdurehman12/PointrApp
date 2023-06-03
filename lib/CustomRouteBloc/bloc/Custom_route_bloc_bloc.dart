@@ -10,9 +10,9 @@ part 'Custom_route_bloc_state.dart';
 class CustomRouteBloc extends Bloc<CustomRouteBlocEvent, CustomRouteBlocState> {
   final CustomRoutesRepo _PRepo;
 
-  CustomRouteBloc(this._PRepo) : super(CustomRouteLoad()) {
+  CustomRouteBloc(this._PRepo) : super(const CustomRouteLoad()) {
     on<CustomRouteBlocEvent>((event, emit) async {
-      emit(CustomRouteLoad());
+      emit(const CustomRouteLoad());
       try {
         if (event is CustomRouteAddEvent) {
           await _PRepo.createRoute(event.Name, event.coordinates);
@@ -23,7 +23,7 @@ class CustomRouteBloc extends Bloc<CustomRouteBlocEvent, CustomRouteBlocState> {
         if (event is CustomRouteBroadCastEvent) {
           await _PRepo.addToSuggested(event.obj);
           // List<CustomRoutes> data = [];
-          emit(CustomRouteMoved());
+          emit(const CustomRouteMoved());
         }
 
         // if (event is readRouteEvent) {

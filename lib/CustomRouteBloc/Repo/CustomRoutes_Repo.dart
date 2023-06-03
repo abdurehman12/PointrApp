@@ -1,7 +1,4 @@
-import 'dart:math';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../classes/custom_route.dart';
@@ -103,7 +100,7 @@ class CustomRoutesRepo {
       final data = snapshot.data() as Map<String, dynamic>?;
       print(data);
       final suggested = (data?['suggested'] as List<dynamic>)
-          .where((item) => item is Map<String, dynamic>)
+          .whereType<Map<String, dynamic>>()
           .toList()
           .cast<Map<String, dynamic>>();
 

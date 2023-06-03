@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pointr/my_theme.dart';
 import 'package:pointr/screens/home.dart';
-import 'package:pointr/widgets/Add_Route.dart';
 
 class BNavScaffold extends StatefulWidget {
   const BNavScaffold({required this.index, super.key});
