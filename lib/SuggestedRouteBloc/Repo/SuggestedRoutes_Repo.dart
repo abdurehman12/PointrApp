@@ -1,7 +1,4 @@
-import 'dart:math';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/SuggestedRoutes.dart';
@@ -58,16 +55,14 @@ class SuggestedRoutesRepo {
             SuggestedRoutes myroute = SuggestedRoutes(routeStops: []);
             final name = item['name'];
             final coordinates = item['coordinates'] as List<dynamic>;
-            if (coordinates != null) {
-              myroute.routeName = name;
-              for (var point in coordinates) {
-                final geoPoint = point as GeoPoint;
-                final latitude = geoPoint.latitude;
-                final longitude = geoPoint.longitude;
-                print('Latitude: $latitude, Longitude: $longitude');
-                myroute.routeStops
-                    .add(LatLng(latitude: latitude, longitude: longitude));
-              }
+            myroute.routeName = name;
+            for (var point in coordinates) {
+              final geoPoint = point as GeoPoint;
+              final latitude = geoPoint.latitude;
+              final longitude = geoPoint.longitude;
+              print('Latitude: $latitude, Longitude: $longitude');
+              myroute.routeStops
+                  .add(LatLng(latitude: latitude, longitude: longitude));
             }
             // print('Name: $name');
             // print('Coordinates: $coordinates');
@@ -109,11 +104,11 @@ class SuggestedRoutesRepo {
       final data = snapshot.data() as Map<String, dynamic>?;
       print(data);
       final suggested = (data?['suggested'] as List<dynamic>)
-          .where((item) => item is Map<String, dynamic>)
+          .whereType<Map<String, dynamic>>()
           .toList()
           .cast<Map<String, dynamic>>();
       final approved = (data?['approved'] as List<dynamic>)
-          .where((item) => item is Map<String, dynamic>)
+          .whereType<Map<String, dynamic>>()
           .toList()
           .cast<Map<String, dynamic>>();
 
@@ -134,7 +129,7 @@ class SuggestedRoutesRepo {
     await docRef.get().then((snapshot) async {
       final data = snapshot.data() as Map<String, dynamic>?;
       final suggested = (data?['suggested'] as List<dynamic>)
-          .where((item) => item is Map<String, dynamic>)
+          .whereType<Map<String, dynamic>>()
           .toList()
           .cast<Map<String, dynamic>>();
 

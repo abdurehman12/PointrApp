@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../widgets/bottomNavMint.dart';
 import '/AllRouteBloc/bloc/all_route_bloc_bloc.dart';
 
 import 'Repo/AllRoutes_Repo.dart';
@@ -23,12 +22,13 @@ class _AllRouteUIState extends State<AllRouteUI> {
   Widget MyBody(BuildContext context) {
     return BlocProvider(
         create: (context) =>
-            AllRouteBloc(AllRoutesRepo())..add(readAllRouteEvent()),
+            AllRouteBloc(AllRoutesRepo())..add(const readAllRouteEvent()),
         child: Scaffold(
           // bottomNavigationBar: MyBottomNavigationBar(),
           appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 20, 243, 50),
-            title: const Text('AllRoute'),
+            // backgroundColor: const Color.fromARGB(255, 20, 243, 50),
+            backgroundColor: Colors.green[400],
+            title: const Text('All Routes'),
             centerTitle: true,
           ),
           body: BlocBuilder<AllRouteBloc, AllRouteBlocState>(
@@ -51,25 +51,32 @@ class _AllRouteUIState extends State<AllRouteUI> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            contentPadding: EdgeInsets.symmetric(
+                            contentPadding: const EdgeInsets.symmetric(
                               vertical: 8,
                               horizontal: 16,
                             ),
-                            tileColor: Color.fromARGB(255, 20, 243, 50),
-                            leading: Icon(Icons.directions_bus),
+                            tileColor: Colors.green[100],
+
+                            leading: Image.asset(
+                              'assets/images/signpost.png',
+                              height: 50,
+                              width: 50,
+                            ),
                             // onTap: () {
                             //   _showSaveForm(state.data[index].routeStops);
                             // },
-                            title: Align(
-                              alignment: Alignment.center,
+
+                            title: Padding(
+                              padding: const EdgeInsets.only(left: 65.0),
                               child: Text(
                                   state.data[index].routeName != null
                                       ? state.data[index].routeName as String
                                       : "MyName",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
                             ),
+
                             // subtitle: Text(state.data[index].coordinates),
                           ),
                         ),
@@ -89,7 +96,7 @@ class _AllRouteUIState extends State<AllRouteUI> {
         ));
   }
 
-  void _showSaveForm(_pressedCoordinates) {
+  void _showSaveForm(pressedCoordinates) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -97,8 +104,8 @@ class _AllRouteUIState extends State<AllRouteUI> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Route Coordinates',
                   style: TextStyle(
@@ -109,19 +116,19 @@ class _AllRouteUIState extends State<AllRouteUI> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _pressedCoordinates.length,
+                  itemCount: pressedCoordinates.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final coordinate = _pressedCoordinates[index];
+                    final coordinate = pressedCoordinates[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
-                        leading: Icon(
+                        leading: const Icon(
                           Icons.location_on,
                           color: Colors.blue,
                         ),
                         title: Text(
                           'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -129,7 +136,7 @@ class _AllRouteUIState extends State<AllRouteUI> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           vertical: 8,
                           horizontal: 16,
                         ),
@@ -138,7 +145,7 @@ class _AllRouteUIState extends State<AllRouteUI> {
                   },
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -146,7 +153,7 @@ class _AllRouteUIState extends State<AllRouteUI> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('ok'),
+                    child: const Text('ok'),
                   ),
                 ],
               ),

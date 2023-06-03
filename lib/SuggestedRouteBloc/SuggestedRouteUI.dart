@@ -3,7 +3,6 @@ import 'package:pointr/screens/login.dart';
 import '/SuggestedRouteBloc/bloc/suggested_route_bloc_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../AllRouteBloc/AllRouteUI.dart';
 import 'Repo/SuggestedRoutes_Repo.dart';
 
 class SuggestedRouteUI extends StatefulWidget {
@@ -39,10 +38,10 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
   Widget MyBody(BuildContext context) {
     return BlocProvider(
         create: (context) => SuggestedRouteBloc(SuggestedRoutesRepo())
-          ..add(SuggestedAllRouteEvent()),
+          ..add(const SuggestedAllRouteEvent()),
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 20, 243, 50),
+            backgroundColor: const Color.fromARGB(255, 20, 243, 50),
             title: const Text('Suggested Routes'),
             centerTitle: true,
             actions: [
@@ -56,7 +55,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
               //   },
               // ),
               IconButton(
-                icon: Icon(Icons.logout),
+                icon: const Icon(Icons.logout),
                 tooltip: 'AllRoutes',
                 color: Colors.white,
                 onPressed: () {
@@ -65,7 +64,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext context) {
-                      return AlertDialog(
+                      return const AlertDialog(
                         content: Row(
                           children: [
                             CircularProgressIndicator(),
@@ -77,11 +76,11 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                     },
                   );
 
-                  Future.delayed(Duration(seconds: 3), () {
+                  Future.delayed(const Duration(seconds: 3), () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LoginPage(),
+                          builder: (context) => const LoginPage(),
                         )); // Close the signing out dialog
                   });
                 },
@@ -92,7 +91,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
             listener: (context, state) {
               if (state is SuggestedRouteMoved) {
                 BlocProvider.of<SuggestedRouteBloc>(context)
-                    .add(SuggestedAllRouteEvent());
+                    .add(const SuggestedAllRouteEvent());
               }
             },
             child: BlocBuilder<SuggestedRouteBloc, SuggestedRouteBlocState>(
@@ -105,7 +104,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                   return RefreshIndicator(
                     onRefresh: () async {
                       BlocProvider.of<SuggestedRouteBloc>(context)
-                          .add(SuggestedAllRouteEvent());
+                          .add(const SuggestedAllRouteEvent());
                     },
                     child: ListView.builder(
                         itemCount: state.data.length,
@@ -120,11 +119,11 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                   vertical: 8,
                                   horizontal: 16,
                                 ),
-                                tileColor: Color.fromARGB(255, 20, 243, 50),
+                                tileColor: const Color.fromARGB(255, 20, 243, 50),
                                 trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -137,11 +136,11 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                                                   index: index));
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
+                                          backgroundColor: Colors.green,
                                         ),
-                                        child: Text('Approve'),
+                                        child: const Text('Approve'),
                                       ),
-                                      SizedBox(width: 8.0),
+                                      const SizedBox(width: 8.0),
                                       ElevatedButton(
                                         onPressed: () {
                                           BlocProvider.of<SuggestedRouteBloc>(
@@ -150,12 +149,12 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                                                   index: index));
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.red,
+                                          backgroundColor: Colors.red,
                                         ),
-                                        child: Text('Reject'),
+                                        child: const Text('Reject'),
                                       ),
                                     ]),
-                                leading: Icon(Icons.directions_bus),
+                                leading: const Icon(Icons.directions_bus),
                                 // onTap: () {
                                 //   _showSaveForm(state.data[index].routeStops);
                                 // },
@@ -166,7 +165,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                                           ? state.data[index].routeName
                                               as String
                                           : "MyName",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold)),
                                 ),
@@ -191,7 +190,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
         ));
   }
 
-  void _showSaveForm(_pressedCoordinates) {
+  void _showSaveForm(pressedCoordinates) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -199,8 +198,8 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: Text(
                   'Route Coordinates',
                   style: TextStyle(
@@ -211,19 +210,19 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: _pressedCoordinates.length,
+                  itemCount: pressedCoordinates.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final coordinate = _pressedCoordinates[index];
+                    final coordinate = pressedCoordinates[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
-                        leading: Icon(
+                        leading: const Icon(
                           Icons.location_on,
                           color: Colors.blue,
                         ),
                         title: Text(
                           'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -231,7 +230,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           vertical: 8,
                           horizontal: 16,
                         ),
@@ -240,7 +239,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                   },
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -248,7 +247,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('ok'),
+                    child: const Text('ok'),
                   ),
                 ],
               ),
@@ -264,7 +263,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
       context: context,
       builder: (BuildContext context) {
         // Return AlertDialog with circular progress indicator
-        return AlertDialog(
+        return const AlertDialog(
           title: Text('Approving Route'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -279,7 +278,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
     );
 
     // Delay for 3 seconds using Future.delayed
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       // Close the dialog
       Navigator.of(context).pop();
 
@@ -288,14 +287,14 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Route Successfully Added'),
+            title: const Text('Route Successfully Added'),
             actions: [
               ElevatedButton(
                 onPressed: () {
                   // Close the dialog
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );

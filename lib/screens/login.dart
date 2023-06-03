@@ -6,8 +6,6 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 // import 'package:socialsignup/screens/home_screen.dart';
 //import 'package:iba_course/Calculator/checking.dart';
 //import 'package:test_app/components/My_button.dart';
-import '/components/My_button.dart';
-import '/components/square_tile.dart';
 import '/components/text_box.dart';
 import 'HomeScreen.dart';
 //import '../firebase_auth/firebase_auth.dart';
@@ -16,7 +14,7 @@ var spacing = const SizedBox(height: 50);
 
 class LoginPage extends StatefulWidget {
   //Function isDark;
-  LoginPage({super.key});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -45,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       AuthController.reset();
       await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         showDialog(
@@ -86,7 +84,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(179, 169, 169, 1),
+      // backgroundColor: const Color.fromRGBO(179, 169, 169, 1),
+      backgroundColor: const Color.fromRGBO(72, 99, 160, 1),
       body: SafeArea(
           child: SingleChildScrollView(
               child: Center(
@@ -98,9 +97,14 @@ class _LoginPageState extends State<LoginPage> {
             ),
 
             // logo
-            const Icon(
-              Icons.directions_bus,
-              size: 100,
+            // const Icon(
+            //   Icons.directions_bus,
+            //   size: 100,
+            // ),
+            Image.asset(
+              'assets/images/bus.png', // Replace with your image path
+              width: 150,
+              height: 150,
             ),
             //you have been missed
 
@@ -110,8 +114,9 @@ class _LoginPageState extends State<LoginPage> {
             const Text(
               "Your Bus Stop Solution",
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             )
             //username
@@ -121,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             // ignore: prefer_const_constructors
             MyTextField(
-              icon: Icon(Icons.person),
+              icon: const Icon(Icons.person),
               controller: UsernameController,
               hint: "Username",
               obsecuretext: false,
@@ -132,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 10,
             ),
             MyTextField(
-              icon: Icon(Icons.lock),
+              icon: const Icon(Icons.lock),
               controller: PasswordController,
               hint: "Password",
               obsecuretext: true,
@@ -142,12 +147,12 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text(
+                  Text(
                     "Forgot Password?",
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.red),
@@ -192,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                   await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SuggestedRouteUI()));
+                          builder: (context) => const SuggestedRouteUI()));
                   AuthController.reset();
                   return;
                 }
@@ -208,8 +213,8 @@ class _LoginPageState extends State<LoginPage> {
               elevation: 0,
               borderRadius: 25,
               color: Colors.black,
-              child: Wrap(
-                children: const [
+              child: const Wrap(
+                children: [
                   Icon(
                     FontAwesomeIcons.signIn,
                     size: 20,

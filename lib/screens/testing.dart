@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,12 +14,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -26,16 +30,16 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    ScreenOne(),
-    ScreenTwo(),
-    ScreenThree(),
+    const ScreenOne(),
+    const ScreenTwo(),
+    const ScreenThree(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bottom Nav Demo'),
+        title: const Text('Bottom Nav Demo'),
       ),
       body: PageView(
         children: _screens,
@@ -52,7 +56,7 @@ class _HomePageState extends State<HomePage> {
             _currentIndex = index;
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Screen 1',
@@ -72,11 +76,13 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ScreenOne extends StatelessWidget {
+  const ScreenOne({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.blue,
-      child: Center(
+      child: const Center(
         child: Text(
           'Screen 1',
           style: TextStyle(fontSize: 24, color: Colors.white),
@@ -87,11 +93,13 @@ class ScreenOne extends StatelessWidget {
 }
 
 class ScreenTwo extends StatelessWidget {
+  const ScreenTwo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.green,
-      child: Center(
+      child: const Center(
         child: Text(
           'Screen 2',
           style: TextStyle(fontSize: 24, color: Colors.white),
@@ -102,11 +110,13 @@ class ScreenTwo extends StatelessWidget {
 }
 
 class ScreenThree extends StatelessWidget {
+  const ScreenThree({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.orange,
-      child: Center(
+      child: const Center(
         child: Text(
           'Screen 3',
           style: TextStyle(fontSize: 24, color: Colors.white),

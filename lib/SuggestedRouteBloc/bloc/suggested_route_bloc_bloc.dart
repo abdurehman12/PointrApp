@@ -11,9 +11,9 @@ class SuggestedRouteBloc
     extends Bloc<SuggestedRouteBlocEvent, SuggestedRouteBlocState> {
   final SuggestedRoutesRepo _PRepo;
 
-  SuggestedRouteBloc(this._PRepo) : super(SuggestedRouteLoad()) {
+  SuggestedRouteBloc(this._PRepo) : super(const SuggestedRouteLoad()) {
     on<SuggestedRouteBlocEvent>((event, emit) async {
-      emit(SuggestedRouteLoad());
+      emit(const SuggestedRouteLoad());
       try {
         if (event is SuggestedRouteAddEvent) {
           await _PRepo.createRoute(event.Name, event.coordinates);
@@ -24,7 +24,7 @@ class SuggestedRouteBloc
         if (event is SuggestedRouteDeleteEvent) {
           await _PRepo.addToApproved(event.index);
           // List<SuggestedRoutes> data = [];
-          emit(SuggestedRouteMoved());
+          emit(const SuggestedRouteMoved());
         }
 
         // if (event is readRouteEvent) {
@@ -41,7 +41,7 @@ class SuggestedRouteBloc
         if (event is SuggestedRouteUpdateEvent) {
           await _PRepo.removeFromSuggested(event.index);
           // List<SuggestedRoutes> data = [];
-          emit(SuggestedRouteMoved());
+          emit(const SuggestedRouteMoved());
         }
       } catch (e) {
         print(e);
