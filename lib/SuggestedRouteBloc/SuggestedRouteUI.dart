@@ -1,5 +1,6 @@
 import 'package:pointr/screens/login.dart';
 
+import '../screens/NewLogin.dart';
 import '/SuggestedRouteBloc/bloc/suggested_route_bloc_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,8 +27,10 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
             TextButton(
                 onPressed: () {
                   // Navigator.pop(context);
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyBody(context)));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyBody(context)),
+                  );
                   // MyBody(context);
                 },
                 child: const Text("OK"))
@@ -41,7 +44,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
           ..add(const SuggestedAllRouteEvent()),
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 20, 243, 50),
+            backgroundColor: Colors.green[400],
             title: const Text('Suggested Routes'),
             centerTitle: true,
             actions: [
@@ -76,11 +79,11 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                     },
                   );
 
-                  Future.delayed(const Duration(seconds: 3), () {
-                    Navigator.push(
+                  Future.delayed(const Duration(seconds: 2), () {
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
+                          builder: (context) => const Login(),
                         )); // Close the signing out dialog
                   });
                 },
@@ -116,6 +119,12 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: ListTile(
+                                leading: Image.asset(
+                                  'assets/images/pathway (1).png',
+                                  height: 40,
+                                  width: 40,
+                                ),
+                                tileColor: Colors.green[100],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -123,38 +132,43 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                                   vertical: 8,
                                   horizontal: 16,
                                 ),
-                                tileColor: const Color.fromARGB(255, 20, 243, 50),
-                                trailing: Row(
+                                subtitle: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      ElevatedButton(
-                                        onPressed: () async {
-                                          await showApproveDialog();
-                                          BlocProvider.of<SuggestedRouteBloc>(
-                                                  context)
-                                              .add(SuggestedRouteDeleteEvent(
-                                                  index: index));
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.green,
+                                      const SizedBox(width: 8.0),
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () async {
+                                            await showApproveDialog();
+                                            BlocProvider.of<SuggestedRouteBloc>(
+                                                    context)
+                                                .add(SuggestedRouteDeleteEvent(
+                                                    index: index));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.green,
+                                          ),
+                                          child: const Text('Approve'),
                                         ),
-                                        child: const Text('Approve'),
                                       ),
                                       const SizedBox(width: 8.0),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          BlocProvider.of<SuggestedRouteBloc>(
-                                                  context)
-                                              .add(SuggestedRouteUpdateEvent(
-                                                  index: index));
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red,
+                                      Expanded(
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            BlocProvider.of<SuggestedRouteBloc>(
+                                                    context)
+                                                .add(SuggestedRouteUpdateEvent(
+                                                    index: index));
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.red,
+                                          ),
+                                          child: const Text('Reject'),
                                         ),
-                                        child: const Text('Reject'),
                                       ),
                                     ]),
-                                leading: const Icon(Icons.directions_bus),
+
                                 // onTap: () {
                                 //   _showSaveForm(state.data[index].routeStops);
                                 // },

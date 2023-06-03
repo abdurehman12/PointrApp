@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pointr/screens/login.dart';
 
 import '../AllRouteBloc/AllRouteUI.dart';
 import '../CustomRouteBloc/CustomRouteUI.dart';
@@ -18,7 +17,7 @@ class HomeScreen extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return const AlertDialog(
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

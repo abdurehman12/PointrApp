@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../classes/custom_route.dart';
@@ -104,9 +103,15 @@ class CustomRoutesRepo {
           .toList()
           .cast<Map<String, dynamic>>();
 
+      obj.routeStops.forEach((element) {
+        print(element.toMap());
+      });
+      var ls = convertToGeoPoints(obj.routeStops);
+      print(ls);
+
       final mapToAdd = {
         'name': obj.routeName,
-        'coordinates': obj.routeStops.map((latLng) => latLng.toMap()).toList(),
+        'coordinates': ls,
       };
       print(mapToAdd);
 
@@ -116,5 +121,11 @@ class CustomRoutesRepo {
         'suggested': suggested,
       });
     });
+  }
+
+  List<GeoPoint> convertToGeoPoints(List<LatLng> latLngList) {
+    return latLngList.map((latLng) {
+      return GeoPoint(latLng.latitude, latLng.longitude);
+    }).toList();
   }
 }

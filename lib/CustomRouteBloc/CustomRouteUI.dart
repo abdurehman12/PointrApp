@@ -28,32 +28,32 @@ class _CustomRouteUI extends State<CustomRouteUI> {
           // bottomNavigationBar: MyBottomNavigationBar(),
           appBar: AppBar(
             backgroundColor: Colors.green[400],
-            leading: IconButton(
-              icon: const Icon(Icons.pending_actions),
-              tooltip: 'Back',
-              color: Colors.white,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SuggestedRouteUI()));
-              },
-            ),
+            // leading: IconButton(
+            //   icon: const Icon(Icons.pending_actions),
+            //   tooltip: 'Back',
+            //   color: Colors.white,
+            //   onPressed: () {
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => const SuggestedRouteUI()));
+            //   },
+            // ),
             title: const Text('Custom Routes'),
             centerTitle: true,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.list),
-                tooltip: 'AllRoutes',
-                color: Colors.white,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const AllRouteUI()));
-                },
-              ),
-            ],
+            // actions: [
+            //   IconButton(
+            //     icon: const Icon(Icons.list),
+            //     tooltip: 'AllRoutes',
+            //     color: Colors.white,
+            //     onPressed: () {
+            //       Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (context) => const AllRouteUI()));
+            //     },
+            //   ),
+            // ],
           ),
           body: BlocListener<CustomRouteBloc, CustomRouteBlocState>(
             listener: (context, state) {
@@ -223,14 +223,14 @@ class _CustomRouteUI extends State<CustomRouteUI> {
       context: context,
       builder: (BuildContext context) {
         // Return AlertDialog with circular progress indicator
-        return const AlertDialog(
-          title: Text('Approving Route'),
+        return AlertDialog(
+          title: Text('Broadcasting Route'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               CircularProgressIndicator(),
               SizedBox(height: 16.0),
-              Text('Please wait...'),
+              Text('Adding route to the suggested database. Please wait...'),
             ],
           ),
         );
@@ -238,7 +238,7 @@ class _CustomRouteUI extends State<CustomRouteUI> {
     );
 
     // Delay for 3 seconds using Future.delayed
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 3), () {
       // Close the dialog
       Navigator.of(context).pop();
 
@@ -247,14 +247,16 @@ class _CustomRouteUI extends State<CustomRouteUI> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Route Successfully Added'),
+            title: Text('Route Successfully Broadcasted'),
+            content: Text(
+                'Route has been added to the suggested database. An admin will review it and approve.'),
             actions: [
               ElevatedButton(
                 onPressed: () {
                   // Close the dialog
                   Navigator.of(context).pop();
                 },
-                child: const Text('OK'),
+                child: Text('OK'),
               ),
             ],
           );
