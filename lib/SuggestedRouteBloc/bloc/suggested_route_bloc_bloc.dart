@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:final_exam/SuggestedRouteBloc/models/SuggestedRoutes.dart';
+import '/SuggestedRouteBloc/models/SuggestedRoutes.dart';
 import 'package:flutter/material.dart';
 
 import '../Repo/SuggestedRoutes_Repo.dart';

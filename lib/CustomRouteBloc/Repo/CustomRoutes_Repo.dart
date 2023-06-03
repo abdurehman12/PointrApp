@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../classes/custom_route.dart';
 import '../models/CustomRoutes.dart';
 
 class CustomRoutesRepo {
@@ -35,24 +36,37 @@ class CustomRoutesRepo {
     // }
   }
 
-  List<CustomRoutes> ReadAllCustomRoutes() {
+  Future<List<CustomRoutes>> ReadAllCustomRoutes() async {
     List<CustomRoutes> customRoutesList = [];
+    List<Map<String, dynamic>> items = await CustomRoute.fetchRoutesFromDb();
+    for (Map<String, dynamic> data in items) {
+      print(data);
+      String? routeName = data['name'];
+      List<LatLng> routeStops = (data['coordinates'] as List<dynamic>)
+          .map((coordinate) => LatLng(
+              latitude: coordinate.latitude, longitude: coordinate.longitude))
+          .toList();
 
-    for (int i = 0; i < 5; i++) {
-      CustomRoutes myRoute = CustomRoutes(
-        routeName: 'MyCustomRoute$i',
-        routeStops: [],
-      );
-
-      // Add latlang points to the routeStops list
-      for (int j = 0; j < 3; j++) {
-        LatLng latLng = LatLng(latitude: 10.0, longitude: 15.0);
-        myRoute.routeStops.add(latLng);
-      }
-
-      // Add the created CustomRoutes object to the list
-      customRoutesList.add(myRoute);
+      customRoutesList.add(CustomRoutes(
+        routeName: routeName,
+        routeStops: routeStops,
+      ));
     }
+    // for (int i = 0; i < 5; i++) {
+    //   CustomRoutes myRoute = CustomRoutes(
+    //     routeName: 'MyCustomRoute$i',
+    //     routeStops: [],
+    //   );
+
+    //   // Add latlang points to the routeStops list
+    //   for (int j = 0; j < 3; j++) {
+    //     LatLng latLng = LatLng(latitude: 10.0, longitude: 15.0);
+    //     myRoute.routeStops.add(latLng);
+    //   }
+
+    //   // Add the created CustomRoutes object to the list
+    //   customRoutesList.add(myRoute);
+    // }
 
     // Print the customRoutesList for verification
     for (CustomRoutes route in customRoutesList) {

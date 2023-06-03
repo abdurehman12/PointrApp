@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../widgets/bottomNavMint.dart';
 import '/AllRouteBloc/bloc/all_route_bloc_bloc.dart';
 
 import 'Repo/AllRoutes_Repo.dart';
@@ -24,8 +25,11 @@ class _AllRouteUIState extends State<AllRouteUI> {
         create: (context) =>
             AllRouteBloc(AllRoutesRepo())..add(readAllRouteEvent()),
         child: Scaffold(
+          // bottomNavigationBar: MyBottomNavigationBar(),
           appBar: AppBar(
+            backgroundColor: Color.fromARGB(255, 20, 243, 50),
             title: const Text('AllRoute'),
+            centerTitle: true,
           ),
           body: BlocBuilder<AllRouteBloc, AllRouteBlocState>(
             builder: (context, state) {
@@ -44,14 +48,14 @@ class _AllRouteUIState extends State<AllRouteUI> {
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: ListTile(
-                            // trailing: CircleAvatar(
-                            //   child: Text(
-                            //     '$index', // Replace with the actual index number
-                            //     style: TextStyle(color: Colors.white),
-                            //   ),
-                            //   backgroundColor: Colors
-                            //       .blue, // Replace with the desired background color
-                            // ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 16,
+                            ),
+                            tileColor: Color.fromARGB(255, 20, 243, 50),
                             leading: Icon(Icons.directions_bus),
                             // onTap: () {
                             //   _showSaveForm(state.data[index].routeStops);
@@ -108,9 +112,27 @@ class _AllRouteUIState extends State<AllRouteUI> {
                   itemCount: _pressedCoordinates.length,
                   itemBuilder: (BuildContext context, int index) {
                     final coordinate = _pressedCoordinates[index];
-                    return ListTile(
-                      title: Text(
-                        'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.location_on,
+                          color: Colors.blue,
+                        ),
+                        title: Text(
+                          'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        tileColor: Colors.grey[200],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 16,
+                        ),
                       ),
                     );
                   },

@@ -11,7 +11,6 @@ import 'package:sizer/sizer.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
-
   static LatLng? currentLatLng;
   static final FocusNode focusNode = FocusNode();
 
@@ -75,35 +74,35 @@ class Home extends StatelessWidget {
                 ),
               ),
               // starred
-              // Consumer<StarProvider>(
-              //   builder: (context, starProvider, child) => starProvider
-              //           .all.isEmpty
-              //       ? Padding(
-              //           padding: const EdgeInsets.only(bottom: 16),
-              //           child: HorizontalChipScroller(
-              //             height: 6.h,
-              //             padding: const EdgeInsets.symmetric(horizontal: 32),
-              //             items: starProvider.all,
-              //             onSelected: (_) {},
-              //           ),
-              //         )
-              //       : const SizedBox(),
-              // ),
+              Consumer<StarProvider>(
+                builder: (context, starProvider, child) => starProvider
+                        .all.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: HorizontalChipScroller(
+                          height: 6.h,
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
+                          items: starProvider.all,
+                          onSelected: (_) {},
+                        ),
+                      )
+                    : const SizedBox(),
+              ),
               // suggestions
-              // AnimatedSize(
-              //   duration: const Duration(milliseconds: 300),
-              //   curve: Curves.bounceIn,
-              //   child: Consumer<NearbyProvider>(
-              //     builder: (context, nearbyProvider, child) =>
-              //         nearbyProvider.suggestions == null
-              //             ? const SizedBox()
-              //             : PlaceListview(
-              //                 items: nearbyProvider.suggestions!,
-              //                 onSelected: (_) {},
-              //                 limit: 5,
-              //               ),
-              //   ),
-              // )
+              AnimatedSize(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.bounceIn,
+                child: Consumer<NearbyProvider>(
+                  builder: (context, nearbyProvider, child) =>
+                      nearbyProvider.suggestions == null
+                          ? const SizedBox()
+                          : PlaceListview(
+                              items: nearbyProvider.suggestions!,
+                              onSelected: (_) {},
+                              limit: 5,
+                            ),
+                ),
+              )
             ],
           ),
         ],

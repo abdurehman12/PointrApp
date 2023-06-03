@@ -1,4 +1,6 @@
-import 'package:final_exam/SuggestedRouteBloc/bloc/suggested_route_bloc_bloc.dart';
+import 'package:pointr/screens/login.dart';
+
+import '/SuggestedRouteBloc/bloc/suggested_route_bloc_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../AllRouteBloc/AllRouteUI.dart';
@@ -16,7 +18,22 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => SuggestedRouteBloc(SuggestedRoutesRepo()),
-        child: MyBody(context));
+        // child: MyBody(context));
+        child: AlertDialog(
+          title: const Text("Welcome Admin"),
+          content: const Text(
+              "You are in the Suggested Routes database, and can approve or reject routes suggested by users. Approved routes will be added to the allroutes list."),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  // Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MyBody(context)));
+                  // MyBody(context);
+                },
+                child: const Text("OK"))
+          ],
+        ));
   }
 
   Widget MyBody(BuildContext context) {
@@ -25,16 +42,48 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
           ..add(SuggestedAllRouteEvent()),
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Color.fromARGB(255, 20, 243, 50),
             title: const Text('Suggested Routes'),
             centerTitle: true,
             actions: [
+              // IconButton(
+              //   icon: Icon(Icons.list),
+              //   tooltip: 'AllRoutes',
+              //   color: Colors.white,
+              //   onPressed: () {
+              //     Navigator.push(context,
+              //         MaterialPageRoute(builder: (context) => AllRouteUI()));
+              //   },
+              // ),
               IconButton(
-                icon: Icon(Icons.list),
+                icon: Icon(Icons.logout),
                 tooltip: 'AllRoutes',
                 color: Colors.white,
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AllRouteUI()));
+                  // Navigator.popUntil(context, ModalRoute.withName("/login"));
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Row(
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(width: 16),
+                            Text('Signing out...'),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+
+                  Future.delayed(Duration(seconds: 3), () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        )); // Close the signing out dialog
+                  });
                 },
               ),
             ],
@@ -68,6 +117,14 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 16,
+                                ),
+                                tileColor: Color.fromARGB(255, 20, 243, 50),
                                 trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -157,9 +214,27 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                   itemCount: _pressedCoordinates.length,
                   itemBuilder: (BuildContext context, int index) {
                     final coordinate = _pressedCoordinates[index];
-                    return ListTile(
-                      title: Text(
-                        'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.location_on,
+                          color: Colors.blue,
+                        ),
+                        title: Text(
+                          'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        tileColor: Colors.grey[200],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 16,
+                        ),
                       ),
                     );
                   },

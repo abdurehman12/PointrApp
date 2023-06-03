@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../classes/custom_route.dart';
 import '../screens/HomeScreen.dart';
 
 class AddRouteForm extends StatelessWidget {
+  // var _routeNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -88,108 +90,164 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _showSaveForm() {
+    var _routeNameController = TextEditingController();
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Save Route',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+          backgroundColor: Colors.pink[100],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Container(
+            // padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Save Route',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Enter route name',
-                  ),
-                ),
-              ),
-              SizedBox(height: 16),
-              Text('Coordinates:'),
-              SizedBox(height: 8),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _pressedCoordinates.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final coordinate = _pressedCoordinates[index];
-                    return ListTile(
-                      title: Text(
-                        'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
+                Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: _routeNameController,
+                      decoration: InputDecoration(
+                        labelText: 'Enter route name',
+                        prefixIcon: Icon(
+                          Icons.text_fields,
+                          color: Colors.blue,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey[400]!,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            content: Row(
-                              children: [
-                                CircularProgressIndicator(),
-                                SizedBox(width: 16),
-                                Text('Saving your route...'),
-                              ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Route name is required';
+                        }
+                        return null;
+                      },
+                    )),
+                SizedBox(height: 16),
+                Text('Coordinates:'),
+                SizedBox(height: 8),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _pressedCoordinates.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final coordinate = _pressedCoordinates[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.location_on,
+                            color: Colors.blue,
+                          ),
+                          title: Text(
+                            'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        },
+                          ),
+                          tileColor: Colors.grey[200],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 16,
+                          ),
+                        ),
                       );
-
-                      Future.delayed(Duration(seconds: 3), () {
-                        Navigator.pop(context); // Close the saving dialog
-
-                        setState(() {
-                          _pressedCoordinates
-                              .clear(); // Empty the _pressedCoordinates list
-                        });
+                    },
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        CustomRoute.addRouteToDb(
+                            _routeNameController.text, _pressedCoordinates);
                         showDialog(
                           context: context,
+                          barrierDismissible: false,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Success'),
-                              content: Text('Route saved successfully.'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => HomeScreen()),
-                                      (route) => false,
-                                    );
-                                  },
-                                  child: Text('OK'),
-                                ),
-                              ],
+                              content: Row(
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(width: 16),
+                                  Text('Saving your route...'),
+                                ],
+                              ),
                             );
                           },
                         );
-                      });
-                    },
-                    child: Text('Save'),
-                  ),
-                ],
-              ),
-            ],
+
+                        Future.delayed(Duration(seconds: 3), () {
+                          Navigator.pop(context); // Close the saving dialog
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Success'),
+                                content: Text('Route saved successfully.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      print(_routeNameController.text);
+
+                                      setState(() {
+                                        _pressedCoordinates
+                                            .clear(); // Empty the _pressedCoordinates list
+                                      });
+
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => HomeScreen()),
+                                        (route) => false,
+                                      );
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        });
+                      },
+                      child: Text('Save'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },
     );
+    print(_routeNameController.text);
   }
 
   @override
