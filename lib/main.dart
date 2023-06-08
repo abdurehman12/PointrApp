@@ -35,7 +35,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = ThemeData();
+    final ThemeData lightTheme = ThemeData(
+      // Light theme configuration
+      brightness: Brightness.light,
+      // Other theme properties...
+    );
+    final ThemeData darkTheme = ThemeData(
+      // Dark theme configuration
+      brightness: Brightness.dark,
+      // Other theme properties...
+    );
 
     return Sizer(
       builder: (context, orientation, deviceType) => MultiProvider(
@@ -57,13 +66,15 @@ class MyApp extends StatelessWidget {
         child: StreamBuilder<User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) => MaterialApp(
+                  theme: lightTheme,
+                  darkTheme: darkTheme,
                   routes: {
                     "/login": (context) => const Login(),
                     "/suggestedRoute": (context) =>
-                        const SuggestedRouteUI(), //data_bloc_ui(),
-                    "/customRoute": (context) => const CustomRouteUI(),
-                    "/AllRoute": (context) => const AllRouteUI(),
-                    "/navbar": (context) => const HomeScreen(),
+                        SuggestedRouteUI(), //data_bloc_ui(),
+                    "/customRoute": (context) => CustomRouteUI(),
+                    "/AllRoute": (context) => AllRouteUI(),
+                    "/navbar": (context) => HomeScreen(),
                   },
                   title: 'Pointr',
                   initialRoute: snapshot.data == null ? "/login" : "/navbar",

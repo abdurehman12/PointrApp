@@ -29,14 +29,14 @@ class RouteDeleteEvent extends AllRouteBlocEvent {
   List<Object?> get props => [];
 }
 
-class readRouteEvent extends AllRouteBlocEvent {
-  final String id;
+// class readRouteEvent extends AllRouteBlocEvent {
+//   final String id;
 
-  const readRouteEvent({required this.id});
+//   const readRouteEvent({required this.id});
 
-  @override
-  List<Object?> get props => [];
-}
+//   @override
+//   List<Object?> get props => [];
+// }
 
 class readAllRouteEvent extends AllRouteBlocEvent {
   const readAllRouteEvent();

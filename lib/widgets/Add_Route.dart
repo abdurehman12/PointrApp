@@ -114,18 +114,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                 ),
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
                       controller: routeNameController,
                       decoration: InputDecoration(
                         labelText: 'Enter route name',
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                        ),
                         prefixIcon: const Icon(
                           Icons.text_fields,
-                          color: Colors.blue,
+                          color: Colors.grey,
                         ),
                         filled: true,
                         fillColor: Colors.grey[200],
@@ -137,16 +144,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
-                            color: Colors.blue,
+                            color: Colors.grey,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Route name is required';
+                        if (value?.isEmpty ?? false) {
+                          return null;
                         }
-                        return null;
+                        return 'Please add a name';
                       },
                     )),
                 const SizedBox(height: 16),
@@ -165,10 +172,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             color: Colors.blue,
                           ),
                           title: Text(
-                            'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
+                            'Coordinate ${index + 1}: ',
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 8),
+                              Text(
+                                'Lat: ${coordinate.latitude}',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                'Lng: ${coordinate.longitude}',
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
                           tileColor: Colors.grey[200],
                           shape: RoundedRectangleBorder(
@@ -229,8 +257,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                       Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                const HomeScreen()),
+                                            builder: (context) => HomeScreen()),
                                         (route) => false,
                                       );
                                     },

@@ -1,4 +1,3 @@
-
 import '../screens/NewLogin.dart';
 import '/SuggestedRouteBloc/bloc/suggested_route_bloc_bloc.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Repo/SuggestedRoutes_Repo.dart';
 
 class SuggestedRouteUI extends StatefulWidget {
-  const SuggestedRouteUI({super.key});
+  late SuggestedRoutesRepo? suggestedRoutesRepo;
+  SuggestedRouteUI({super.key, this.suggestedRoutesRepo});
 
   @override
   State<SuggestedRouteUI> createState() => _SuggestedRouteUI();
@@ -15,6 +15,9 @@ class SuggestedRouteUI extends StatefulWidget {
 class _SuggestedRouteUI extends State<SuggestedRouteUI> {
   @override
   Widget build(BuildContext context) {
+    SuggestedRoutesRepo? repository = widget.suggestedRoutesRepo == null
+        ? SuggestedRoutesRepo()
+        : widget.suggestedRoutesRepo!;
     return BlocProvider(
         create: (context) => SuggestedRouteBloc(SuggestedRoutesRepo()),
         // child: MyBody(context));
@@ -24,23 +27,26 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
               "You are in the Suggested Routes database, and can approve or reject routes suggested by users. Approved routes will be added to the allroutes list."),
           actions: [
             TextButton(
-                onPressed: () {
-                  // Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyBody(context)),
-                  );
-                  // MyBody(context);
-                },
-                child: const Text("OK"))
+              onPressed: () {
+                // Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyBody(context, repository)),
+                );
+                // MyBody(context);
+              },
+              child: const Text("OK"),
+              key: ValueKey("okay"),
+            )
           ],
         ));
   }
 
-  Widget MyBody(BuildContext context) {
+  Widget MyBody(BuildContext context, SuggestedRoutesRepo repository) {
     return BlocProvider(
-        create: (context) => SuggestedRouteBloc(SuggestedRoutesRepo())
-          ..add(const SuggestedAllRouteEvent()),
+        create: (context) =>
+            SuggestedRouteBloc(repository)..add(const SuggestedAllRouteEvent()),
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.green[400],
@@ -58,7 +64,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
               // ),
               IconButton(
                 icon: const Icon(Icons.logout),
-                tooltip: 'AllRoutes',
+                tooltip: 'Logout',
                 color: Colors.white,
                 onPressed: () {
                   // Navigator.popUntil(context, ModalRoute.withName("/login"));
@@ -108,85 +114,100 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                       BlocProvider.of<SuggestedRouteBloc>(context)
                           .add(const SuggestedAllRouteEvent());
                     },
-                    child: ListView.builder(
-                        itemCount: state.data.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              _showSaveForm(state.data[index].routeStops);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: ListTile(
-                                leading: Image.asset(
-                                  'assets/images/pathway (1).png',
-                                  height: 40,
-                                  width: 40,
-                                ),
-                                tileColor: Colors.green[100],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 8,
-                                  horizontal: 16,
-                                ),
-                                subtitle: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const SizedBox(width: 8.0),
-                                      Expanded(
-                                        child: ElevatedButton(
-                                          onPressed: () async {
-                                            await showApproveDialog();
-                                            BlocProvider.of<SuggestedRouteBloc>(
-                                                    context)
-                                                .add(SuggestedRouteDeleteEvent(
-                                                    index: index));
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.green,
+                    child: Container(
+                      color: Colors.white,
+                      child: ListView.builder(
+                          itemCount: state.data.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              key: ValueKey(index),
+                              onTap: () {
+                                // print(state.data[index].routeName);
+                                _showSaveForm(state.data[index].routeStops);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Container(
+                                  color: Colors.green[100],
+                                  child: ListTile(
+                                    // key: ValueKey(state.data[index].routeName),
+                                    leading: Image.asset(
+                                      'assets/images/pathway (1).png',
+                                      height: 40,
+                                      width: 40,
+                                    ),
+                                    tileColor: Colors.green[100],
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 8,
+                                      horizontal: 16,
+                                    ),
+                                    subtitle: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(width: 8.0),
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () async {
+                                                await showApproveDialog();
+                                                BlocProvider.of<
+                                                            SuggestedRouteBloc>(
+                                                        context)
+                                                    .add(
+                                                        SuggestedRouteDeleteEvent(
+                                                            index: index));
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green,
+                                              ),
+                                              child: const Text('Approve'),
+                                            ),
                                           ),
-                                          child: const Text('Approve'),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8.0),
-                                      Expanded(
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            BlocProvider.of<SuggestedRouteBloc>(
-                                                    context)
-                                                .add(SuggestedRouteUpdateEvent(
-                                                    index: index));
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.red,
+                                          const SizedBox(width: 8.0),
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                BlocProvider.of<
+                                                            SuggestedRouteBloc>(
+                                                        context)
+                                                    .add(
+                                                        SuggestedRouteUpdateEvent(
+                                                            index: index));
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              child: const Text('Reject'),
+                                            ),
                                           ),
-                                          child: const Text('Reject'),
-                                        ),
-                                      ),
-                                    ]),
+                                        ]),
 
-                                // onTap: () {
-                                //   _showSaveForm(state.data[index].routeStops);
-                                // },
-                                title: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                      state.data[index].routeName != null
-                                          ? state.data[index].routeName
-                                              as String
-                                          : "MyName",
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
+                                    // onTap: () {
+                                    //   _showSaveForm(state.data[index].routeStops);
+                                    // },
+                                    title: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                          state.data[index].routeName != null
+                                              ? state.data[index].routeName
+                                                  as String
+                                              : "MyName",
+                                          style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black)),
+                                    ),
+                                    // subtitle: Text(state.data[index].coordinates),
+                                  ),
                                 ),
-                                // subtitle: Text(state.data[index].coordinates),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                    ),
                   );
                 } else if (state is SuggestedRouteError) {
                   return const Center(
@@ -208,6 +229,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+          backgroundColor: Colors.white,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -218,6 +240,7 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -233,11 +256,38 @@ class _SuggestedRouteUI extends State<SuggestedRouteUI> {
                           Icons.location_on,
                           color: Colors.blue,
                         ),
-                        title: Text(
-                          'Coordinate ${index + 1}: (${coordinate.latitude}, ${coordinate.longitude})',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Coordinate ${index + 1}:',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                          ],
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Lang: ${coordinate.longitude} ",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                )),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            Text("Lat:    ${coordinate.latitude} ",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                )),
+                          ],
                         ),
                         tileColor: Colors.grey[200],
                         shape: RoundedRectangleBorder(

@@ -4,7 +4,9 @@ import 'package:pointr/AllRouteBloc/Repo/AllRoutes_Repo.dart';
 import 'package:pointr/AllRouteBloc/models/AllRoutes.dart';
 
 List<AllRoutes> MockData = [
-  AllRoutes(routeStops: [], routeName: "My Route"),
+  AllRoutes(
+      routeStops: [LatLng(latitude: 12.68, longitude: 15.85)],
+      routeName: "My Route"),
   AllRoutes(routeStops: [], routeName: "My Route2")
 ];
 
@@ -21,19 +23,20 @@ class MockAllRoutes implements AllRoutesRepo {
 
   @override
   Future<void> createRoute(String name, List<LatLng> coordinates) {
-    // TODO: implement createRoute
-    throw UnimplementedError();
+    if (name == "1") {
+      throw Exception("Error");
+    }
+    return Future.delayed(const Duration(seconds: 2), () => null);
   }
 
   @override
   deleteRoute(String routeId) {
     // TODO: implement deleteRoute
-    throw UnimplementedError();
+    // throw UnimplementedError();
   }
 
   @override
   updateRoute(String name, List<LatLng> coordinates) {
     // TODO: implement updateRoute
-    throw UnimplementedError();
   }
 }

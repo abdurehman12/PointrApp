@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/AllRouteBloc/bloc/all_route_bloc_bloc.dart';
 
-import '/CustomRouteBloc/CustomRouteUI.dart';
 import 'Repo/AllRoutes_Repo.dart';
 
 class AllRouteUI extends StatefulWidget {
-  const AllRouteUI({super.key});
+  late AllRoutesRepo? repo;
+
+  AllRouteUI({super.key, this.repo});
 
   @override
   State<AllRouteUI> createState() => _AllRouteUIState();
@@ -15,15 +16,17 @@ class AllRouteUI extends StatefulWidget {
 class _AllRouteUIState extends State<AllRouteUI> {
   @override
   Widget build(BuildContext context) {
+    AllRoutesRepo? repository =
+        widget.repo == null ? AllRoutesRepo() : widget.repo!;
     return BlocProvider(
         create: (context) => AllRouteBloc(AllRoutesRepo()),
-        child: MyBody(context));
+        child: MyBody(context, repository));
   }
 
-  Widget MyBody(BuildContext context) {
+  Widget MyBody(BuildContext context, AllRoutesRepo repository) {
     return BlocProvider(
         create: (context) =>
-            AllRouteBloc(AllRoutesRepo())..add(const readAllRouteEvent()),
+            AllRouteBloc(repository)..add(const readAllRouteEvent()),
         child: Scaffold(
           // bottomNavigationBar: MyBottomNavigationBar(),
           appBar: AppBar(
@@ -39,50 +42,62 @@ class _AllRouteUIState extends State<AllRouteUI> {
                   child: CircularProgressIndicator(),
                 );
               } else if (state is AllRouteSuccess) {
-                return ListView.builder(
-                    itemCount: state.data.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          _showSaveForm(state.data[index].routeStops);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: ListTile(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 16,
-                            ),
-                            tileColor: Colors.green[100],
+                return Container(
+                  color: Colors.white,
+                  child: ListView.builder(
+                      itemCount: state.data.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          key: ValueKey(index),
+                          onTap: () {
+                            _showSaveForm(state.data[index].routeStops);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Container(
+                              color: Colors.green[100],
+                              child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 16,
+                                ),
+                                tileColor: Colors.green[100],
 
-                            leading: Image.asset(
-                              'assets/images/signpost.png',
-                              height: 50,
-                              width: 50,
-                            ),
-                            // onTap: () {
-                            //   _showSaveForm(state.data[index].routeStops);
-                            // },
+                                leading: Image.asset(
+                                  'assets/images/signpost.png',
+                                  height: 40,
+                                  width: 40,
+                                ),
+                                // onTap: () {
+                                //   _showSaveForm(state.data[index].routeStops);
+                                // },
 
-                            title: Padding(
-                              padding: const EdgeInsets.only(left: 65.0),
-                              child: Text(
-                                  state.data[index].routeName != null
-                                      ? state.data[index].routeName as String
-                                      : "MyName",
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                            ),
+                                title: Padding(
+                                  padding: const EdgeInsets.only(left: 65.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                        state.data[index].routeName != null
+                                            ? state.data[index].routeName
+                                                as String
+                                            : "MyName",
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black)),
+                                  ),
+                                ),
 
-                            // subtitle: Text(state.data[index].coordinates),
+                                // subtitle: Text(state.data[index].coordinates),
+                              ),
+                            ),
                           ),
-                        ),
-                      );
-                    });
+                        );
+                      }),
+                );
               } else if (state is AllRouteError) {
                 return const Center(
                   child: Text('Error'),
@@ -102,6 +117,7 @@ class _AllRouteUIState extends State<AllRouteUI> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
+          backgroundColor: Colors.white,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -112,6 +128,7 @@ class _AllRouteUIState extends State<AllRouteUI> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
               ),
@@ -134,9 +151,10 @@ class _AllRouteUIState extends State<AllRouteUI> {
                               'Coordinate ${index + 1}:',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                           ],
@@ -149,7 +167,7 @@ class _AllRouteUIState extends State<AllRouteUI> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 )),
-                            SizedBox(
+                            const SizedBox(
                               height: 6,
                             ),
                             Text("Lat:    ${coordinate.latitude} ",

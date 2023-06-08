@@ -1,5 +1,3 @@
-// import 'package:equatable/equatable.dart';
-
 part of 'Custom_route_bloc_bloc.dart';
 
 @immutable

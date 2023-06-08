@@ -26,8 +26,8 @@ void main() {
 
     // Verify the presence of 'New user?' and 'Create a new account' text
     final richTextFinder = find.byType(RichText);
-    expect(richTextFinder, findsNWidgets(9));
-    for (int i = 0; i < 9; i++) {
+    expect(richTextFinder, findsNWidgets(8));
+    for (int i = 0; i < 8; i++) {
       final richTextWidget = tester.widget<RichText>(richTextFinder.at(i));
       final textSpan = richTextWidget.text;
 

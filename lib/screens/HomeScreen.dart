@@ -9,11 +9,12 @@ import 'NewLogin.dart';
 import '../classes/catalogue.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  late FirebaseAuth? auth;
+  HomeScreen({super.key, this.auth});
 
   _signOut(context) async {
     // Perform sign out logic here
-    FirebaseAuth.instance.signOut();
+    auth == null ? await FirebaseAuth.instance.signOut() : {};
     // Navigator.popUntil(context, ModalRoute.withName('/login'));
     showDialog(
       context: context,
@@ -41,7 +42,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Catalogue.loadRoutes();
+    auth == null ? Catalogue.loadRoutes() : {};
+    // Catalogue.loadRoutes();
     return Scaffold(
       // backgroundColor: const Color.fromRGBO(0, 162, 232, 1.0),
       backgroundColor: Colors.white,
@@ -51,7 +53,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              await _signOut(context);
+              auth == null ? await _signOut(context) : {};
             },
           ),
         ],
@@ -105,12 +107,16 @@ class HomeScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'You can find all available bus routes here. Click on the route to see the coordinates of the route.',
-                              style: TextStyle(fontSize: 16),
+                              'You can enter your source and destination points here and we will find the best bus route for you.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                             ),
                           ],
                         ),
@@ -129,10 +135,8 @@ class HomeScreen extends StatelessWidget {
                 //   context,
                 //   MaterialPageRoute(builder: (context) => OtherScreen()),
                 // );
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AllRouteUI()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CustomRouteUI()));
               },
               splashColor: Colors.red, // Customize the splash color
               highlightColor: Colors.green,
@@ -161,16 +165,20 @@ class HomeScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'All Bus Routes',
+                              'My Custom Bus Routes',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'You can find all available bus routes here. Click on the route to see the coordinates of the route.',
-                              style: TextStyle(fontSize: 16),
+                              'You can find your custom bus routes here. Click on the route to see the coordinates of the route.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                             ),
                           ],
                         ),
@@ -224,12 +232,16 @@ class HomeScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                             SizedBox(height: 8),
                             Text(
-                              'You can find all available bus routes here. Click on the route to see the coordinates of the route.',
-                              style: TextStyle(fontSize: 16),
+                              'You can add custom bus routes here. Click on the Map to add coordinates to your route.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                             ),
                           ],
                         ),
@@ -248,10 +260,8 @@ class HomeScreen extends StatelessWidget {
                 //   context,
                 //   MaterialPageRoute(builder: (context) => OtherScreen()),
                 // );
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CustomRouteUI()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllRouteUI()));
               },
               splashColor: Colors.blue[400], // Customize the splash color
               highlightColor: Colors.blue[400],
@@ -279,16 +289,20 @@ class HomeScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'My Custom Bus Routes',
+                              'All Bus Routes',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                             SizedBox(height: 8),
                             Text(
                               'You can find all available bus routes here. Click on the route to see the coordinates of the route.',
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
                             ),
                           ],
                         ),

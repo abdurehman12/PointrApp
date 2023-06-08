@@ -45,7 +45,7 @@ void _showSaveForm(context, pressedCoordinates) {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                         ],
@@ -58,7 +58,7 @@ void _showSaveForm(context, pressedCoordinates) {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 6,
                           ),
                           Text("Lat:    ${coordinate.latitude} ",
